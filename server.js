@@ -57,10 +57,11 @@ app.post('/infinite', (req, res) => {
         });
         solutionCounts.push(solutionCount);
     });
+    var value = amount+Number(req.body.amount);
     if(solutionCounts.length==0)
         res.render('exception',{ total : req.body.amount, option : 'infinite'})
     else
-        res.render('page4',{solutions :solutionCounts , amountPaid : amount, total : req.body.amount});
+        res.render('page4',{solutions :solutionCounts , amountPaid : value, total : amount});
 });
 
 app.post('/finite',(req,res)=>
@@ -86,12 +87,12 @@ app.post('/finite',(req,res)=>
         });
         solutionCounts.push(solutionCount);
     });
-
+    var value = amount+Number(req.body.amount);
     console.log(solutionCounts);
     if(solutionCounts.length==0)
         res.render('exception',{ total : req.body.amount, option : 'finite'})
     else
-        res.render('page4',{solutions : solutionCounts , amountPaid : amount, total : req.body.amount});
+        res.render('page4',{solutions : solutionCounts , amountPaid : value , total : amount});
 })
 
 function generateCombinations(coins, counts, amount, index, currentCombination, result) {
