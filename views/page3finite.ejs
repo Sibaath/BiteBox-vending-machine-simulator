@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Calculator</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url('https://wallpaperboat.com/wp-content/uploads/2019/10/free-website-background-01.jpg');
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input[type="number"] {
+            width: calc(70% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        .checkbox-container {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .checkbox-container b {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .checkbox-container label {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        #optimalSolution {
+            margin-top: 20px;
+            color: #333;
+        }
+        
+        #remainingAmount {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .quantity-input {
+            width: calc(30% - 22px);
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculate Change</h2>
+        <label for="display_amount">Total amount received:</label>
+        <input type="number" id="display_amount" value="<%= total %>" readonly>
+        <label for="userAmount">Enter the amount you have:</label>
+        <input type="number" id="userAmount">
+        <div id="errorMessage" class="error-message" style="display: none;"></div> 
+        <h3>Select options:</h3>
+        <div class="checkbox-container">
+            <b>
+                <input type="checkbox" id="option1" value="1" onchange="toggleInput(this)">
+                <label for="option1">Rs 1</label>
+            </b>
+            <input type="number" class="quantity-input" id="quantity1" value="0" disabled>
+            <b>
+                <input type="checkbox" id="option2" value="2" onchange="toggleInput(this)">
+                <label for="option2">Rs 2</label>
+            </b>
+            <input type="number" class="quantity-input" id="quantity2" value="0" disabled>
+            <b>
+                <input type="checkbox" id="option3" value="5" onchange="toggleInput(this)">
+                <label for="option3">Rs 5</label>
+            </b>
+            <input type="number" class="quantity-input" id="quantity3" value="0" disabled>
+            <b>
+                <input type="checkbox" id="option4" value="10" onchange="toggleInput(this)">
+                <label for="option4">Rs 10</label>
+            </b>
+            <input type="number" class="quantity-input" id="quantity4" value="0" disabled>
+            <b>
+                <input type="checkbox" id="option5" value="20" onchange="toggleInput(this)">
+                <label for="option5">Rs 20</label>
+            </b>
+            <input type="number" class="quantity-input" id="quantity5" value="0" disabled>
+            <b>
+                <input type="checkbox" id="option6" value="50" onchange="toggleInput(this)">
+                <label for="option6">Rs 50</label>
+            </b>
+            <input type="number" class="quantity-input" id="quantity6" value="0" disabled>
+            <b>
+                <input type="checkbox" id="option7" value="100" onchange="toggleInput(this)">
+                <label for="option7">Rs 100</label>
+            </b>
+                <input type="number" class="quantity-input" id="quantity7" value="0" disabled>
+         </div>
+        <form id="submitForm" method="POST" action="/finite" >
+            <input type="hidden" id="selectedDenominations" name="selectedDenominations">
+            <input type="hidden" name="remAmount" id="remAmount">
+            <input type="hidden" name="amount" id="amount" value="<%= total %>">
+            <input type="hidden" name="selectedQuantities" id="selectedQuantities">
+            <button id="get_button">Get Change</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('get_button').addEventListener("click", (event) => {
+
+            event.preventDefault();
+
+            var actualTotal           = parseFloat(document.getElementById('display_amount').value);
+            var userAmount            = parseFloat(document.getElementById('userAmount').value);
+            var errorMessage          = document.getElementById('errorMessage');
+            var checkboxes            = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
+            var checked               = false;
+            var zeroQuantity          = false;
+            var selectedDenominations = [];
+            var selectedQuantities    = [];
+            var defaultQuantities     = [10,10,10,10,10,10,10];
+            var defaultDenominations  = [1,2,5,10,20,50,100]
+
+            checkboxes.forEach(function(checkbox, index) {
+                if (checkbox.checked) {
+                    checked = true;
+                    var quantityInput = document.getElementById('quantity' + (index + 1));
+                    if (quantityInput.value === '0') {
+                        zeroQuantity = true;
+                        selectedQuantities.push(10);
+                    }
+                    else
+                    selectedQuantities.push(quantityInput.value);
+
+                    selectedDenominations.push(checkbox.value);
+                }
+            });
+
+            if (isNaN(userAmount) || userAmount < actualTotal) {
+                if (isNaN(userAmount)) {
+                    errorMessage.innerText = "Please enter a valid amount.";
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                if (userAmount < actualTotal) {
+                    errorMessage.innerText     = "The entered amount is less than the actual total amount.";
+                    errorMessage.style.display = 'block';
+                }
+            } else if (!checked) {
+                var confirmation = confirm("If neither the checkbox nor any coins are selected, all coin quantities will default to 10. Do you want to continue?");
+                if (confirmation) {
+                    document.getElementById('selectedDenominations').value = defaultDenominations;
+                    document.getElementById('remAmount').value             = userAmount-actualTotal;
+                    document.getElementById('selectedQuantities').value    = defaultQuantities;
+                    document.getElementById('submitForm').submit();
+                }
+            } else if (zeroQuantity) {
+                var confirmation = confirm("If the number of coins is not selected, it will be set to 10. Do you want to continue?");
+                if (confirmation) {
+                    document.getElementById('selectedDenominations').value = selectedDenominations;
+                    document.getElementById('remAmount').value             = userAmount-actualTotal;
+                    document.getElementById('selectedQuantities').value    = selectedQuantities;
+                    document.getElementById('submitForm').submit();
+                }
+            } else {
+                var remainingAmount = userAmount- actualTotal;
+                errorMessage.style.display = 'none';
+                document.getElementById('selectedDenominations').value = selectedDenominations;
+                document.getElementById('remAmount').value             = remainingAmount;
+                document.getElementById('selectedQuantities').value    = selectedQuantities;
+                document.getElementById('submitForm').submit();
+            }
+        });
+
+        function toggleInput(checkbox) {
+            var quantityInput = checkbox.parentNode.nextElementSibling; 
+            quantityInput.disabled = !checkbox.checked;
+            if (!checkbox.checked) {
+                quantityInput.value = 0;
+            }
+        }
+    </script>       
+</body>
+</html>
+

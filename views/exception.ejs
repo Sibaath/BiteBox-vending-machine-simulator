@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reselect Denominations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            background-image: url('https://wallpaperboat.com/wp-content/uploads/2019/10/free-website-background-01.jpg');
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            color: red;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function redirectToVending(total, option) {
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/checkout";
+            var totalInput = document.createElement("input");
+            totalInput.type = "hidden";
+            totalInput.name = "amount";
+            totalInput.value = total;
+            var optionInput = document.createElement("input");
+            optionInput.type = "hidden";
+            optionInput.name = "option";
+            optionInput.value = option;
+            form.appendChild(totalInput);
+            form.appendChild(optionInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function startCountdown(total, option) {
+            var seconds = 5;
+            var countdownElement = document.getElementById('countdown');
+
+            var countdownInterval = setInterval(function() {
+                seconds--;
+                countdownElement.textContent = "You will be redirected in to checkout page " + seconds + " seconds";
+
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    redirectToVending(total, option);
+                }
+            }, 1000);
+        }
+        window.onload = function() {
+            var total = "<%= total %>";
+            var option = "<%= option %>";
+            startCountdown(total, option);
+        };
+    </script>
+</head>
+<body>
+    <h1>Change Cannot Be Given</h1>
+    <p>Sorry, change cannot be given for the specified denominations. Please reselect the denominations.</p>
+    <div id="countdown" class="countdown">You will be redirected to checkout page in 5 seconds</div>
+</body>
+</html>

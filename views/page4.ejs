@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Calculator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #1e5799 0%, #2989d8 50%, #7db9e8 100%);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://wallpaperboat.com/wp-content/uploads/2019/10/free-website-background-01.jpg');
+          }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .bill {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .bill p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .solution {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Align buttons to the left and right */
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Additional styling for input boxes */
+        input[type="text"] {
+            width: 50px;
+            text-align: center;
+        }
+
+        .additional-change {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .additional-change p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bill">
+            <h2>Bill</h2>
+            <p>Total Amount: <%= total %></p>
+            <p>Amount Paid: <%= amountPaid %></p>
+            <hr>
+            <p>Remaining Amount: <%= total - amountPaid %></p>
+        </div>
+        <h2>Optimum Change</h2>
+        <div id="optimumChange">
+            <label class="solution">Optimum Change:</label><br>
+            <br>
+            <% for (let denomination in solutions[0]) { %>
+                <% if (solutions[0][denomination] > 0) { %>
+                    <div>
+                        <label for="denomination<%= denomination %>">Rs. <%= denomination %>:</label>
+                        <input id="denomination<%= denomination %>" type="text" value="<%= solutions[0][denomination] %>" disabled>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>        
+        <div class="additional-change">
+            <% if (solutions.length > 1) { %>
+                <p style="font-weight: bold;color: #007bff;"><strong>Other Possible Solutions:</strong></p><br>
+                <% for (let i = 1; i < solutions.length; i++) { %>
+                    <p>
+                        <strong>Solution <%= i %>:</strong>
+                        <% for (let denomination in solutions[i]) { %>
+                            <% if (solutions[i][denomination] > 0) { %>
+                                <%= "Rs." + denomination + " (" + solutions[i][denomination] + ")" %>, 
+                            <% } %>
+                        <% } %>
+                    </p>
+                <% } %>
+            <% } else { %>
+                <p style="text-align: center;">No other possible solutions exist.</p>
+            <% } %>
+        </div>        
+        <div class="button-container">
+            <button onclick="showOtherPossibleChange()">Others</button>
+            <button type="submit" onclick="window.location.href='/'">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        function showOtherPossibleChange() {
+            var additionalChangeDiv = document.querySelector('.additional-change');
+            additionalChangeDiv.style.display = additionalChangeDiv.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

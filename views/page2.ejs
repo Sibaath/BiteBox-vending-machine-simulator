@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vending Machine</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #1e5799 0%, #2989d8 50%, #7db9e8 100%);
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-image: url('https://wallpaperboat.com/wp-content/uploads/2019/10/free-website-background-01.jpg');
+    }
+
+    #outer-vending-machine {
+      background-color: #ccc;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      background-color: #920230;    
+    }
+
+    #vending-machine {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      grid-gap: 10px;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .slot {
+      display: flex;  
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      margin: 0%;
+      border-radius: 5px;
+      background-color:  rgb(90, 234, 227);
+      border: 1px solid black;
+    }
+
+    .slot button {
+      padding: 10px;
+      background-color: #3285dea3;
+      border: 2px solid #fff;
+      border-radius: 5px;
+      color: black;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .slot img {
+      width: 60%;
+      height: 60%;
+      object-fit: contain;
+      z-index: 0;
+    }
+
+    .slot:hover button {
+      opacity: 1;
+    }
+
+    .slot button span {
+      display: block;
+      font-size: 12px;
+      font-weight: normal;
+      color: black;
+      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    #totalAmount {
+      position: absolute;
+      right: 20px; 
+      bottom: 20px; 
+      color: #fff;
+      font-size: 20px;
+    }
+
+    #checkout-container {
+      position: absolute;
+      left: 50%; 
+      bottom: 20px; 
+      transform: translateX(-50%);
+    }
+
+    #checkout {
+      padding: 15px 30px;
+      background-color: #007bff;
+      border: 2px solid black;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #checkout:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div id="outer-vending-machine"> 
+    <div id="vending-machine"> 
+      <div class="slot">
+        <img src="/img/coke.png" alt="Coke">
+        <button data-name="Coke" data-price="20">Coke <span>Rs.20</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/milkshakes.png" alt="Water">
+        <button data-name="Milkshake" data-price="40">Milkshake <span>Rs.40</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/water.png" alt="Sprite">
+        <button data-name="Water" data-price="20">Water <span>Rs.20</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/sandwich.png" alt="Sandwhich">
+        <button data-name="Sandwhich" data-price="50">Sandwhich <span>Rs.50</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/lays.png" alt="Lays">
+        <button data-name="Lays" data-price="30">Lays <span>Rs.30</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/kurkure.png" alt="Kurkure">
+        <button data-name="Kurkure" data-price="15">Kurkure <span>Rs.15</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/popcorn.png" alt="Popcorn">
+        <button data-name="Popcorn" data-price="35">Popcorn <span>Rs.35</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/chocolate.png" alt="Chocolate">
+        <button data-name="Chocolate" data-price="25">Chocolate<span>Rs.25</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/wafers.png" alt="Wafers">
+        <button data-name="Wafers" data-price="10">Wafers <span>Rs.10</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/biscuit1.png" alt="biscuit">
+        <button data-name="biscuit" data-price="30">biscuit <span>Rs.30</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/biscuits.png" alt="Cookies">
+        <button data-name="Cookies" data-price="35">Choco Cookies <span>Rs.35</span></button>
+      </div>
+      <div class="slot">
+        <img src="/img/miranda.png" alt="Miranda">
+        <button data-name="Miranda" data-price="40">Miranda <span>Rs.40</span></button>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+<form id="checkoutform" method="post" action="/checkout">
+  <div id="totalAmount" style="color: black;">Total: Rs 0.00</div>
+  <div id="checkout-container">
+  <input type="hidden" id="option" name="option">
+  <input type="hidden" id="amount" name="amount">
+  <button id="checkout";>Checkout</button>
+  </div>
+</form>
+  <script>
+    const buttons = document.querySelectorAll('.slot button');
+    const totalDisplay = document.getElementById('totalAmount');
+    let total = 0;
+    const urlParams = new URLSearchParams(window.location.search);
+    document.getElementById("option").value = urlParams.get('option');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const price = parseFloat(button.dataset.price);
+        total += price;
+        totalDisplay.textContent = `Total: Rs ${total.toFixed(2)}`;
+        document.getElementById("amount").value = total;
+      });
+    });
+    
+  </script>
+</body>
+</html>

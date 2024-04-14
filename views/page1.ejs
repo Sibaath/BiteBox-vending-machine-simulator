@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vending Machine Simulator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+        background-image: url('https://wallpaperboat.com/wp-content/uploads/2019/10/free-website-background-01.jpg');
+    }
+    .background {
+        height: 100%;
+        padding: 20px 0;
+        background-size: cover;
+    }
+    .container {
+        max-width: 800px;
+        margin: 80px auto 0;
+        text-align: center;
+        background-color: #e5e7eb;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    }
+    .name
+    {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333333;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .heading {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333333;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .welcome {
+        font-size: 24px;
+        margin-bottom: 30px;
+        color: #666666;
+    }
+    .box {
+        display: inline-block;
+        width: 45%;
+        background-color: #f5f5f5;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px 10px;
+        transition: background-color 0.3s ease;
+    }
+    .box:hover {
+        background-color: #d9d9d9;
+    }
+    .box h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #333333;
+    }
+    .box p {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #666666;
+    }
+    .button {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #ff6633;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .button:hover {
+        background-color: #ff4d1a;
+    }
+</style>
+</head>
+<body>
+    <div class="background">
+        <div class="container">
+            <div class="name" style="text-transform: capitalize;">BITE BOX</div>
+            <div class="heading"> Vending Machine Simulator</div>
+            <div class="welcome">Welcome User!</div>
+            <div class="box">
+                <h2>Finite Coin Simulator</h2>
+                <button class="button" id="finite">Enter</button>
+            </div>
+            <div class="box">
+                <h2>Infinite Coin Simulator</h2>
+                <button class="button" id="infinite">Enter</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.getElementById('finite').addEventListener("click",e=>
+    {
+        window.location.href="/vending?option=finite"
+    });
+
+    document.getElementById('infinite').addEventListener("click",e=>
+    {
+        window.location.href="/vending?option=infinite"
+    });
+</script>
+</html>
